@@ -188,6 +188,11 @@ function renderDetailContent(club) {
         : `<div class="detail-logo-placeholder"><i class="fas fa-users"></i></div>`
       }
       <div class="detail-club-name">${esc(club.name || 'Unnamed Club')}</div>
+      ${club.category ? `
+        <div class="detail-category-badge">
+          <i class="${CATEGORY_ICONS[club.category] || 'fas fa-folder'}"></i>
+          <span>${esc(club.category)}</span>
+        </div>` : ''}
       ${getClubHeadsArray(club.clubHead).length > 0 ? `
         <div class="detail-club-head">
           <i class="fas fa-user-tie" style="margin-right:6px"></i>Club Heads:

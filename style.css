@@ -268,6 +268,65 @@ body {
 .stats-pill i { color: var(--gold); }
 
 /* =====================================================
+   CATEGORY FILTER TABS
+   ===================================================== */
+.category-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.25rem 1.25rem;
+  margin-bottom: 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.category-tabs::-webkit-scrollbar {
+  height: 6px;
+}
+
+.category-tabs::-webkit-scrollbar-thumb {
+  background: var(--border-dk);
+  border-radius: 10px;
+}
+
+.cat-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--text-mid);
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: 'Inter Tight', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--trans);
+  box-shadow: var(--shadow-sm);
+}
+
+.cat-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(139,26,26,0.03);
+  transform: translateY(-2px);
+}
+
+.cat-tab.active {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+  box-shadow: 0 4px 14px rgba(139,26,26,0.25);
+}
+
+.cat-tab.active i {
+  color: var(--gold-lt);
+}
+
+/* =====================================================
    CLUBS GRID
    ===================================================== */
 .clubs-grid {
@@ -353,6 +412,21 @@ body {
   font-weight: 700;
   font-size: 1rem;
   color: var(--text);
+}
+
+.club-card-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(201,146,42,0.12);
+  color: #9c6c15;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin: 3px 0 2px;
 }
 
 .club-card-head {
@@ -523,6 +597,27 @@ body {
   text-shadow: 0 3px 15px rgba(0,0,0,0.4);
   position: relative;
   z-index: 1;
+}
+
+.detail-category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(8px);
+  color: var(--white);
+  padding: 5px 16px;
+  border-radius: 100px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  margin: 0.2rem auto 0.75rem;
+  border: 1px solid rgba(255,255,255,0.25);
+  position: relative;
+  z-index: 1;
+}
+
+.detail-category-badge i {
+  color: var(--gold-lt);
 }
 
 .detail-club-head {
@@ -725,7 +820,8 @@ body {
 .req { color: var(--primary); }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
   width: 100%;
   padding: 10px 14px;
   border: 1.5px solid var(--border);
@@ -738,8 +834,13 @@ body {
   outline: none;
 }
 
+.form-group select {
+  cursor: pointer;
+}
+
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(139,26,26,0.1);
 }

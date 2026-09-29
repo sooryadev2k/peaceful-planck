@@ -158,6 +158,7 @@ async function addClub(fields, logoFile, achievements, onProgress) {
     const newClub = {
         id: clubId,
         name: fields.name,
+        category: fields.category || 'Other',
         clubHead: fields.clubHead,
         mission: fields.mission,
         aboutClub: fields.aboutClub,
@@ -206,6 +207,7 @@ async function updateClub(clubId, fields, newLogoFile, achievements, onProgress)
     currentClubs[idx] = {
         ...currentClubs[idx],
         name: fields.name,
+        category: fields.category || currentClubs[idx].category || 'Other',
         clubHead: fields.clubHead,
         mission: fields.mission,
         aboutClub: fields.aboutClub,
