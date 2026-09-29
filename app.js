@@ -655,6 +655,12 @@ async function submitClubForm(e) {
       const updatedClub = { id: editingClubId, ...fields, achievements: achRows };
       syncToSheets('update', updatedClub);
 
+      // Update local state so UI updates instantly
+      const idx = allClubs.findIndex(c => c.id === editingClubId);
+      if (idx !== -1) allClubs[idx] = updatedClub;
+      renderGrid();
+      if (currentClubId === editingClubId) renderDetailContent(updatedClub);
+
       showToast('Club updated successfully!', 'success');
 
     } else {
@@ -664,6 +670,10 @@ async function submitClubForm(e) {
       // Sync new club to Google Sheets
       const newClub = { id: newId, ...fields, achievements: achRows };
       syncToSheets('add', newClub);
+
+      // Update local state so UI updates instantly
+      allClubs.unshift(newClub);
+      renderGrid();
 
       showToast('Club added successfully!', 'success');
     }
