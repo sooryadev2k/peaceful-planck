@@ -136,7 +136,7 @@ function renderDetailContent(club) {
       }
       <div class="detail-club-name">${esc(club.name || 'Unnamed Club')}</div>
       ${club.clubHead
-        ? `<div class="detail-club-head"><i class="fas fa-user-tie" style="margin-right:5px"></i>Club Head: ${esc(club.clubHead)}</div>`
+        ? `<div class="detail-club-head"><i class="fas fa-user-tie" style="margin-right:5px"></i>Club Heads: ${esc(club.clubHead)}</div>`
         : ''
       }
     </div>
