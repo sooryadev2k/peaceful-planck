@@ -1,139 +1,68 @@
-# Campus Clubs Portal
+# Campus Clubs Portal (Supabase Edition)
 
-A university clubs showcase website inspired by **Amrita Vishwa Vidyapeetham**, backed by **Firebase**.
-
----
-
-## 🚀 Quick Start (Local Preview)
-
-Because the site uses Firebase SDKs, it **cannot** be opened directly as a `file://` URL.
-You need a local HTTP server. The easiest options:
-
-### Option A — VS Code Live Server (recommended)
-1. Install the **Live Server** extension in VS Code
-2. Right-click `index.html` → **Open with Live Server**
-
-### Option B — Python
-```bash
-# Python 3
-python -m http.server 5500
-# then open http://localhost:5500
-```
-
-### Option C — Node.js
-```bash
-npx serve .
-```
+A university clubs showcase portal inspired by **Amrita Vishwa Vidyapeetham**, backed by **Supabase** (PostgreSQL + Real-time + Storage) with automatic **Google Sheets** syncing.
 
 ---
 
-## 🔥 Firebase Setup
+## ⚡ 2-Minute Supabase Setup Guide
 
-### 1. Set Firestore & Storage Rules
-In the [Firebase Console](https://console.firebase.google.com/project/portal-1feca):
+### 1. Create a Free Supabase Project
+1. Go to **[supabase.com](https://supabase.com)** and sign in (free).
+2. Click **New Project**, choose a project name (e.g. `campus-clubs-portal`) and set a database password.
 
-**Firestore → Rules** — paste the contents of `firestore.rules`  
-**Storage → Rules** — paste the contents of `storage.rules`
+### 2. Run the SQL Schema
+1. In your Supabase project dashboard, open the **SQL Editor** on the left menu.
+2. Click **New Query**.
+3. Open `supabase-schema.sql` from this repository, copy all contents, paste it into the editor, and click **Run**.
+*(This creates the `clubs` table, `config` table with admin passwords, row security policies, and real-time triggers).*
 
-Click **Publish** for each.
+### 3. Create a Public Storage Bucket for Images
+1. Go to **Storage** on the left menu.
+2. Click **New bucket**.
+3. Name it: **`club-assets`**
+4. **IMPORTANT:** Turn the toggle **"Public bucket"** to **ON** (green).
+5. Click **Save**.
 
-### 2. Enable Storage
-Go to **Storage** in the Firebase Console and click **Get Started** (if not already done).
-Choose any region (e.g., `asia-south1` for India).
-
-### 3. Seed Passwords (automatic)
-On first admin login, the app will automatically create a `config/passwords` document
-in Firestore with the default passwords:
-
-| Role | Password | Access |
-|------|----------|--------|
-| A1 — Full Admin | `Admin@1` | Add, Edit, Delete |
-| A2 — Editor | `admin2` | Add, Edit only |
-
-To **change passwords**: open Firestore Console → `config` → `passwords`
-and edit the `a1` / `a2` fields directly.
-
----
-
-## 🌐 Deploy to Firebase Hosting
-
-```bash
-# Install Firebase CLI (once)
-npm install -g firebase-tools
-
-# Login
-firebase login
-
-# Deploy everything (hosting + rules)
-firebase deploy --project portal-1feca
-```
-
-Your site will be live at: **https://portal-1feca.web.app**
+### 4. Connect to Your Website
+1. Go to **Project Settings** (gear icon) → **API**.
+2. Copy your **Project URL** and **anon public Key**.
+3. Open [`supabase-config.js`](supabase-config.js) and paste them at the top:
+   ```javascript
+   const SUPABASE_URL = 'https://xyzcompany.supabase.co';
+   const SUPABASE_ANON_KEY = 'eyJhbGciOi...';
+   ```
 
 ---
 
-## 📂 File Structure
+## 🔐 Administrator Access
+
+Admin passwords are automatically loaded from your Supabase `config` table:
+
+| Role | Password | Capabilities |
+|------|----------|-------------|
+| **A1 — Full Admin** | `Admin@1` | Add, Edit, and Delete clubs |
+| **A2 — Editor** | `admin2` | Add & Edit clubs (cannot delete) |
+
+To change passwords at any time: Go to Supabase Dashboard → **Table Editor** → `config` table → update the `passwords` row.
+
+---
+
+## 📊 Optional: Google Sheets Sync
+
+1. Open `apps-script.gs`, follow the setup comments to deploy it as a Google Apps Script Web App.
+2. Paste the Web App URL into `app.js` on line 9 (`const SHEETS_WEBHOOK_URL = '...'`).
+
+---
+
+## 📂 Project Structure
 
 ```
 peaceful-planck/
-├── index.html          # Main SPA entry point
-├── style.css           # Amrita-inspired theme
-├── firebase-config.js  # Firebase init + CRUD helpers
-├── app.js              # SPA logic, rendering, admin controls
-├── firestore.rules     # Firestore security rules
-├── storage.rules       # Firebase Storage rules
-├── firebase.json       # Firebase Hosting + rules config
-└── README.md           # This file
+├── index.html           # Main SPA layout
+├── style.css            # Amrita-inspired design system
+├── app.js               # UI logic, routing, admin controls, lightbox
+├── supabase-config.js   # Supabase client, storage uploads, CRUD helpers
+├── supabase-schema.sql  # Database schema & security rules
+├── apps-script.gs       # Google Sheets sync script
+└── README.md            # Documentation
 ```
-
----
-
-## ✨ Features
-
-| Feature | Details |
-|---------|---------|
-| **Club Grid** | Responsive grid of club logo cards |
-| **Club Detail** | Slide-in panel with logo, mission, about, achievements, joining info, contact |
-| **Achievement Gallery** | Up to **15 images** per club with lightbox viewer |
-| **Admin A1** (`Admin@1`) | Add · Edit · Delete clubs |
-| **Admin A2** (`admin2`) | Add · Edit clubs (no delete) |
-| **Passwords in Firebase** | Stored in `config/passwords` Firestore document |
-| **Real-time Updates** | Firestore `onSnapshot` — changes appear instantly |
-| **Image Upload** | Logo + achievements stored in Firebase Storage |
-| **Search** | Live search bar filters clubs by name |
-| **Responsive** | Mobile, tablet, desktop layouts |
-| **Keyboard Support** | Esc closes panels; arrow keys navigate lightbox |
-
----
-
-## 🔐 Admin Password Management
-
-Passwords are stored in Firestore at: `config` → `passwords`
-
-```
-{
-  a1: "Admin@1",   // Full Admin
-  a2: "admin2"     // Editor
-}
-```
-
-Change them any time from the Firestore Console. No code change needed.
-
----
-
-## ⚙️ Club Data Model (Firestore)
-
-Collection: `clubs`
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Club name |
-| `logoUrl` | string | Firebase Storage URL |
-| `clubHead` | string | Name of club head |
-| `mission` | string | Club mission |
-| `aboutClub` | string | About the club |
-| `achievements` | array | `[{ caption, imageUrl }]` — max 15 |
-| `joiningProcedure` | string | How to join |
-| `contact` | string | Phone / email / social |
-| `createdAt` | timestamp | Auto-set on creation |
-| `updatedAt` | timestamp | Auto-set on edit |

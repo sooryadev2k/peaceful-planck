@@ -2,6 +2,13 @@
 // Main SPA logic: rendering, admin, routing, forms
 
 // =====================================================
+//  Google Sheets Sync Config
+//  Paste your Apps Script Web App URL here after deploying it.
+//  Leave empty ('') to disable Sheets sync.
+// =====================================================
+const SHEETS_WEBHOOK_URL = '';   // ← Paste your Apps Script URL here
+
+// =====================================================
 //  State
 // =====================================================
 let currentUser    = null;          // null | 'a1' | 'a2'
@@ -577,11 +584,21 @@ async function submitClubForm(e) {
 
       statusTxt.textContent = 'Saving changes…';
       await updateClub(editingClubId, fields, logoFile, achRows, onProg);
+
+      // Sync updated club to Google Sheets
+      const updatedClub = { id: editingClubId, ...fields, achievements: achRows };
+      syncToSheets('update', updatedClub);
+
       showToast('Club updated successfully!', 'success');
 
     } else {
       statusTxt.textContent = 'Creating club…';
-      await addClub(fields, logoFile, achRows, onProg);
+      const newId = await addClub(fields, logoFile, achRows, onProg);
+
+      // Sync new club to Google Sheets
+      const newClub = { id: newId, ...fields, achievements: achRows };
+      syncToSheets('add', newClub);
+
       showToast('Club added successfully!', 'success');
     }
 
@@ -589,7 +606,7 @@ async function submitClubForm(e) {
 
   } catch (err) {
     console.error('[submitClubForm]', err);
-    showToast('Error saving club — check console for details.', 'error');
+    showToast(`Save failed: ${err.message || err.code || 'Check permissions'}`, 'error');
   }
 
   setBusy(submitBtn, false);
@@ -613,6 +630,7 @@ async function deleteCurrentClub() {
 
   try {
     await deleteClub(currentClubId);
+    syncToSheets('delete', { id: currentClubId });   // Sync deletion to Google Sheets
     closeClubDetail();
     showToast(`"${name}" deleted successfully`, 'success');
   } catch (err) {
@@ -679,4 +697,45 @@ function esc(str) {
 /** Convert newlines to <br> (call AFTER esc) */
 function nl2br(str) {
   return str.replace(/\n/g, '<br>');
+}
+
+// =====================================================
+//  Google Sheets Sync
+// =====================================================
+
+/**
+ * Fire-and-forget sync of club data to Google Sheets via Apps Script Web App.
+ * Uses text/plain POST (simple CORS request — no preflight needed).
+ *
+ * @param {'add'|'update'|'delete'} action
+ * @param {Object} club  Club object (for 'delete', only needs { id })
+ */
+function syncToSheets(action, club) {
+  if (!SHEETS_WEBHOOK_URL) return;   // Not configured — skip silently
+
+  const payload = {
+    action,
+    club: {
+      id:               club.id               || '',
+      name:             club.name             || '',
+      clubHead:         club.clubHead         || '',
+      mission:          club.mission          || '',
+      aboutClub:        club.aboutClub        || '',
+      joiningProcedure: club.joiningProcedure || '',
+      contact:          club.contact          || '',
+      logoUrl:          club.logoUrl          || '',
+      achievementCount: (club.achievements || []).filter(a => a.imageUrl || a.existingUrl).length,
+      syncedAt:         new Date().toISOString()
+    }
+  };
+
+  // text/plain avoids CORS preflight — Apps Script receives it fine
+  fetch(SHEETS_WEBHOOK_URL, {
+    method:  'POST',
+    mode:    'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+    body:    JSON.stringify(payload)
+  }).catch(err => {
+    console.warn('[Sheets sync] Non-critical error:', err.message);
+  });
 }
