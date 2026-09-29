@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Clubs: anyone can read; writes controlled by app-level password ──
+    match /clubs/{clubId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // ── Config (passwords): readable by all; writable by all (for seeding) ──
+    //    After the first run, you may restrict write to false for extra security.
+    match /config/{docId} {
+      allow read:  if true;
+      allow write: if true;
+    }
+  }
+}
