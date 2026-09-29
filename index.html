@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Campus Clubs Portal</title>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts (Amrita style) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Petrona:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Petrona:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap"
+    rel="stylesheet">
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <!-- ==================== NAVBAR ==================== -->
@@ -51,7 +55,7 @@
     </div>
     <div class="hero-wave">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none">
-        <path fill="#f8f6f3" d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z"/>
+        <path fill="#f8f6f3" d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" />
       </svg>
     </div>
   </section>
@@ -85,7 +89,7 @@
         <span>Campus Clubs Portal</span>
       </div>
       <p>Empowering student communities through collaboration and innovation.</p>
-      <p class="footer-copy">&copy; 2024 Campus Clubs Portal. All rights reserved.</p>
+      <p class="footer-copy">&copy; 2026 Campus Clubs Portal. All rights reserved.</p>
     </div>
   </footer>
 
@@ -109,7 +113,7 @@
           <div class="input-icon-wrap">
             <i class="fas fa-key input-prefix-icon"></i>
             <input type="password" id="login-password" placeholder="Enter admin password"
-                   onkeydown="if(event.key==='Enter') doLogin()">
+              onkeydown="if(event.key==='Enter') doLogin()">
           </div>
         </div>
         <div id="login-error" class="alert-error hidden">
@@ -172,11 +176,11 @@
             </div>
 
             <div class="form-group">
-              <label>Club Logo <span class="req">*</span> <small style="color:var(--text-light);font-weight:400">(PNG/JPG, max 5MB)</small></label>
+              <label>Club Logo <span class="req">*</span> <small
+                  style="color:var(--text-light);font-weight:400">(PNG/JPG, max 5MB)</small></label>
               <div class="file-drop-zone" id="logo-drop-zone" onclick="document.getElementById('f-logo').click()"
-                   ondragover="event.preventDefault();this.classList.add('drag-over')"
-                   ondragleave="this.classList.remove('drag-over')"
-                   ondrop="handleLogoDrop(event)">
+                ondragover="event.preventDefault();this.classList.add('drag-over')"
+                ondragleave="this.classList.remove('drag-over')" ondrop="handleLogoDrop(event)">
                 <img id="logo-preview" class="file-preview hidden" alt="Logo preview">
                 <div id="logo-placeholder" class="drop-placeholder">
                   <i class="fas fa-cloud-upload-alt"></i>
@@ -201,7 +205,9 @@
 
             <div class="form-group">
               <label>About Club <span class="req">*</span></label>
-              <textarea id="f-aboutClub" placeholder="Tell us about this club — its history, purpose, and what makes it unique…" rows="4" required></textarea>
+              <textarea id="f-aboutClub"
+                placeholder="Tell us about this club — its history, purpose, and what makes it unique…" rows="4"
+                required></textarea>
             </div>
 
             <div class="form-row">
@@ -216,7 +222,7 @@
             </div>
           </div>
 
-          <!-- Achievements -->
+          <!-- Achievements (Up to 15) -->
           <div class="form-section">
             <div class="form-section-title" style="justify-content:space-between">
               <span><i class="fas fa-trophy"></i> Achievements</span>
@@ -270,10 +276,9 @@
     <span>Add Club</span>
   </div>
 
-  <!-- ==================== SUPABASE SDK ==================== -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script src="supabase-config.js"></script>
+  <!-- ==================== SCRIPTS ==================== -->
+  <script src="github-config.js"></script>
   <script src="app.js"></script>
 </body>
+
 </html>
