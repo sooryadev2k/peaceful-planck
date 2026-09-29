@@ -4,7 +4,7 @@
 const GITHUB_CONFIG = {
     owner: 'sooryadev2k',         // Your GitHub username / organization
     repo: 'peaceful-planck',      // Your GitHub repository name
-    branch: 'main',               // Your branch (main or gh-pages)
+    branch: 'master',             // Changed from 'main' to 'master'
     token: localStorage.getItem('gh_token') || ''  // Loads token securely from browser memory
 };
 // =====================================================
