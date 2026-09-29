@@ -169,10 +169,15 @@
                 <label>Club Name <span class="req">*</span></label>
                 <input type="text" id="f-name" placeholder="e.g. Robotics Club" required>
               </div>
-              <div class="form-group">
-                <label>Club Head Name <span class="req">*</span></label>
-                <input type="text" id="f-clubHead" placeholder="e.g. Dr. Anita Sharma" required>
-              </div>
+            </div>
+
+            <!-- Club Heads dynamic list -->
+            <div class="form-group">
+              <label>Club Heads <span class="req">*</span></label>
+              <div id="club-heads-list"></div>
+              <button type="button" class="btn btn-outline btn-sm" onclick="addClubHeadRow()" style="margin-top:0.5rem">
+                <i class="fas fa-plus"></i> Add Club Head
+              </button>
             </div>
 
             <div class="form-group">

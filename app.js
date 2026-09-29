@@ -16,6 +16,7 @@ let currentClubId  = null;          // ID of the club detail panel currently ope
 let editingClubId  = null;          // ID of club being edited (null = adding new)
 let allClubs       = [];            // Live-synced array of club objects
 let achRows        = [];            // Achievement form rows: { id, existingUrl, file, caption, previewUrl }
+let clubHeadRows   = [];            // Club heads list: { id, name }
 let lbImages       = [];            // Lightbox: filtered images array
 let lbIndex        = 0;             // Lightbox: current index
 let unsubscribe    = null;          // Firestore listener cleanup
@@ -135,10 +136,13 @@ function renderDetailContent(club) {
         : `<div class="detail-logo-placeholder"><i class="fas fa-users"></i></div>`
       }
       <div class="detail-club-name">${esc(club.name || 'Unnamed Club')}</div>
-      ${club.clubHead
-        ? `<div class="detail-club-head"><i class="fas fa-user-tie" style="margin-right:5px"></i>Club Heads: ${esc(club.clubHead)}</div>`
-        : ''
-      }
+      ${getClubHeadsArray(club.clubHead).length > 0 ? `
+        <div class="detail-club-head">
+          <i class="fas fa-user-tie" style="margin-right:6px"></i>Club Heads:
+          ${getClubHeadsArray(club.clubHead).map(h =>
+            `<span style="display:inline-block;background:rgba(255,255,255,0.18);border-radius:100px;padding:2px 12px;margin:3px 4px;font-size:0.88rem">${esc(h.trim())}</span>`
+          ).join('')}
+        </div>` : ''}
     </div>
 
     <div class="detail-body">
@@ -355,6 +359,7 @@ function doLogout() {
 function openAddModal() {
   editingClubId = null;
   achRows       = [];
+  clubHeadRows  = [];
 
   document.getElementById('form-modal-title').innerHTML =
     '<i class="fas fa-plus-circle"></i> Add New Club';
@@ -365,6 +370,7 @@ function openAddModal() {
   document.getElementById('logo-placeholder').style.display = '';
   document.getElementById('f-logo').value = '';
 
+  renderClubHeadRows();
   renderAchRows();
   updateAchCounter();
 
@@ -384,11 +390,17 @@ function openEditModal() {
 
   // Populate text fields
   document.getElementById('f-name').value             = club.name             || '';
-  document.getElementById('f-clubHead').value         = club.clubHead         || '';
   document.getElementById('f-mission').value          = club.mission          || '';
   document.getElementById('f-aboutClub').value        = club.aboutClub        || '';
   document.getElementById('f-joiningProcedure').value = club.joiningProcedure || '';
   document.getElementById('f-contact').value          = club.contact          || '';
+
+  // Load existing club heads into rows
+  clubHeadRows = getClubHeadsArray(club.clubHead).map((name, i) => ({
+    id: Date.now() + i,
+    name: name.trim()
+  }));
+  renderClubHeadRows();
 
   // Logo preview
   if (club.logoUrl) {
@@ -404,7 +416,7 @@ function openEditModal() {
 
   // Load existing achievements into rows
   achRows = (club.achievements || []).map((a, i) => ({
-    id:          Date.now() + i,
+    id:          Date.now() + i + 1000,
     existingUrl: a.imageUrl || '',
     file:        null,
     caption:     a.caption  || '',
@@ -425,7 +437,60 @@ function closeClubFormModal() {
     document.body.style.overflow = '';
   }
   achRows       = [];
+  clubHeadRows  = [];
   editingClubId = null;
+}
+
+// =====================================================
+//  Club Heads List
+// =====================================================
+
+/** Parse clubHead string (comma-separated) OR array into a clean array */
+function getClubHeadsArray(clubHead) {
+  if (!clubHead) return [];
+  if (Array.isArray(clubHead)) return clubHead.filter(h => h.trim());
+  return clubHead.split(',').map(h => h.trim()).filter(h => h);
+}
+
+function addClubHeadRow() {
+  clubHeadRows.push({ id: Date.now(), name: '' });
+  renderClubHeadRows();
+}
+
+function removeClubHeadRow(rowId) {
+  clubHeadRows = clubHeadRows.filter(r => r.id !== rowId);
+  renderClubHeadRows();
+}
+
+function updateClubHeadName(rowId, value) {
+  const row = clubHeadRows.find(r => r.id === rowId);
+  if (row) row.name = value;
+}
+
+function renderClubHeadRows() {
+  const list = document.getElementById('club-heads-list');
+  if (!list) return;
+
+  if (clubHeadRows.length === 0) {
+    list.innerHTML = `<p style="font-size:0.83rem;color:var(--text-light);margin-bottom:0.5rem">No club heads added yet.</p>`;
+    return;
+  }
+
+  list.innerHTML = clubHeadRows.map((row, idx) => `
+    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
+      <span style="background:var(--primary);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0">${idx + 1}</span>
+      <input type="text"
+             value="${esc(row.name)}"
+             placeholder="Full name (e.g. Dr. Anita Sharma)"
+             oninput="updateClubHeadName(${row.id}, this.value)"
+             style="flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:0.9rem;font-family:'Inter Tight',sans-serif;outline:none;transition:border-color 0.2s"
+             onfocus="this.style.borderColor='var(--primary)'"
+             onblur="this.style.borderColor='var(--border)'">
+      <button type="button" class="btn btn-sm btn-danger" onclick="removeClubHeadRow(${row.id})" title="Remove">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  `).join('');
 }
 
 // =====================================================
@@ -554,7 +619,7 @@ async function submitClubForm(e) {
 
   const fields = {
     name:              document.getElementById('f-name').value.trim(),
-    clubHead:          document.getElementById('f-clubHead').value.trim(),
+    clubHead:          clubHeadRows.map(r => r.name).filter(n => n.trim()).join(', '),
     mission:           document.getElementById('f-mission').value.trim(),
     aboutClub:         document.getElementById('f-aboutClub').value.trim(),
     joiningProcedure:  document.getElementById('f-joiningProcedure').value.trim(),
