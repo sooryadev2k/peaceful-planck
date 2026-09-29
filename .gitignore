@@ -1,8 +1,1 @@
-# Sensitive config containing GitHub Personal Access Token
-github-config.js
 
-# Local environment / IDE files
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
