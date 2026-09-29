@@ -106,18 +106,18 @@
       </div>
       <div class="modal-body">
         <p style="color:var(--text-mid);font-size:0.9rem;margin-bottom:1.25rem;">
-          Enter your administrator password to manage club listings.
+          To manage clubs, paste your <b>GitHub Personal Access Token</b> (starts with <code>ghp_</code>).
         </p>
         <div class="form-group">
-          <label>Password</label>
+          <label>GitHub Token</label>
           <div class="input-icon-wrap">
             <i class="fas fa-key input-prefix-icon"></i>
-            <input type="password" id="login-password" placeholder="Enter admin password"
+            <input type="password" id="login-password" placeholder="ghp_..."
               onkeydown="if(event.key==='Enter') doLogin()">
           </div>
         </div>
         <div id="login-error" class="alert-error hidden">
-          <i class="fas fa-exclamation-circle"></i> Invalid password. Please try again.
+          <i class="fas fa-exclamation-circle"></i> Invalid token. Make sure it has 'repo' scope.
         </div>
         <button class="btn btn-primary full-width" id="login-btn" onclick="doLogin()">
           <i class="fas fa-sign-in-alt"></i> Login

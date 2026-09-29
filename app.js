@@ -336,6 +336,7 @@ async function doLogin() {
 
 function doLogout() {
   currentUser = null;
+  if (typeof verifyPassword === 'function') verifyPassword('logout');
 
   const adminBtn    = document.getElementById('admin-btn');
   const adminStatus = document.getElementById('admin-status');
