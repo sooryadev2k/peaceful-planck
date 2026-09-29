@@ -17,9 +17,10 @@ let editingClubId  = null;          // ID of club being edited (null = adding ne
 let allClubs       = [];            // Live-synced array of club objects
 let achRows        = [];            // Achievement form rows: { id, existingUrl, file, caption, previewUrl }
 let clubHeadRows   = [];            // Club heads list: { id, name }
+let activeCategory = 'all';         // Currently selected category filter
 let lbImages       = [];            // Lightbox: filtered images array
 let lbIndex        = 0;             // Lightbox: current index
-let unsubscribe    = null;          // Firestore listener cleanup
+let unsubscribe    = null;          // Listener cleanup
 
 // =====================================================
 //  Boot
@@ -54,20 +55,70 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // =====================================================
+//  Category Filter
+// =====================================================
+const CATEGORY_ICONS = {
+  'Technical':      'fas fa-microchip',
+  'Cultural':       'fas fa-music',
+  'Sports':         'fas fa-futbol',
+  'Social Service': 'fas fa-hands-helping',
+  'Literary':       'fas fa-book-open',
+  'Arts & Media':   'fas fa-palette',
+  'Academic':       'fas fa-graduation-cap',
+  'Other':          'fas fa-ellipsis-h'
+};
+
+function renderCategoryTabs() {
+  const tabsEl = document.getElementById('category-tabs');
+  if (!tabsEl) return;
+
+  // Collect unique categories from data
+  const cats = [...new Set(allClubs.map(c => c.category || 'Other').filter(Boolean))].sort();
+
+  let html = `<button class="cat-tab ${activeCategory === 'all' ? 'active' : ''}" data-cat="all" onclick="filterByCategory('all')">
+    <i class="fas fa-th"></i> All (${allClubs.length})
+  </button>`;
+
+  cats.forEach(cat => {
+    const count = allClubs.filter(c => (c.category || 'Other') === cat).length;
+    const icon  = CATEGORY_ICONS[cat] || 'fas fa-folder';
+    html += `<button class="cat-tab ${activeCategory === cat ? 'active' : ''}" data-cat="${esc(cat)}" onclick="filterByCategory('${esc(cat)}')">
+      <i class="${icon}"></i> ${esc(cat)} (${count})
+    </button>`;
+  });
+
+  tabsEl.innerHTML = html;
+}
+
+function filterByCategory(cat) {
+  activeCategory = cat;
+  renderCategoryTabs();
+  renderGrid();
+}
+
+// =====================================================
 //  Club Grid
 // =====================================================
 function renderGrid() {
   const grid  = document.getElementById('clubs-grid');
   const query = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
 
-  const filtered = query
+  let filtered = query
     ? allClubs.filter(c => (c.name || '').toLowerCase().includes(query))
-    : allClubs;
+    : [...allClubs];
+
+  // Apply category filter
+  if (activeCategory !== 'all') {
+    filtered = filtered.filter(c => (c.category || 'Other') === activeCategory);
+  }
+
+  // Update category tabs (always)
+  renderCategoryTabs();
 
   if (filtered.length === 0) {
     const msg = allClubs.length === 0
       ? 'No clubs yet. An admin can add clubs using the <strong>+ Add Club</strong> button.'
-      : 'No clubs match your search.';
+      : 'No clubs match your search / filter.';
     grid.innerHTML = `
       <div class="empty-state">
         <i class="fas fa-${allClubs.length === 0 ? 'users' : 'search'}"></i>
@@ -87,6 +138,7 @@ function renderGrid() {
       </div>
       <div class="club-card-info">
         <div class="club-card-name">${esc(club.name || 'Unnamed Club')}</div>
+        ${club.category ? `<span class="club-card-category"><i class="${CATEGORY_ICONS[club.category] || 'fas fa-folder'}" style="margin-right:4px"></i>${esc(club.category)}</span>` : ''}
         ${club.clubHead ? `<div class="club-card-head"><i class="fas fa-user-tie" style="font-size:.7rem;margin-right:4px"></i>${esc(club.clubHead)}</div>` : ''}
         ${(club.achievements || []).filter(a => a.imageUrl).length
           ? `<span class="club-card-tag"><i class="fas fa-trophy"></i>${(club.achievements || []).filter(a => a.imageUrl).length} Achievement${(club.achievements || []).filter(a => a.imageUrl).length > 1 ? 's' : ''}</span>`
@@ -391,6 +443,7 @@ function openEditModal() {
 
   // Populate text fields
   document.getElementById('f-name').value             = club.name             || '';
+  document.getElementById('f-category').value         = club.category         || '';
   document.getElementById('f-mission').value          = club.mission          || '';
   document.getElementById('f-aboutClub').value        = club.aboutClub        || '';
   document.getElementById('f-joiningProcedure').value = club.joiningProcedure || '';
@@ -620,6 +673,7 @@ async function submitClubForm(e) {
 
   const fields = {
     name:              document.getElementById('f-name').value.trim(),
+    category:          document.getElementById('f-category').value,
     clubHead:          clubHeadRows.map(r => r.name).filter(n => n.trim()).join(', '),
     mission:           document.getElementById('f-mission').value.trim(),
     aboutClub:         document.getElementById('f-aboutClub').value.trim(),

@@ -73,6 +73,13 @@
       </div>
     </div>
 
+    <!-- Category Filter Tabs -->
+    <div id="category-tabs" class="category-tabs">
+      <button class="cat-tab active" data-cat="all" onclick="filterByCategory('all')">
+        <i class="fas fa-th"></i> All Clubs
+      </button>
+    </div>
+
     <div id="clubs-grid" class="clubs-grid">
       <div class="loading-state">
         <i class="fas fa-circle-notch fa-spin"></i>
@@ -168,6 +175,20 @@
               <div class="form-group">
                 <label>Club Name <span class="req">*</span></label>
                 <input type="text" id="f-name" placeholder="e.g. Robotics Club" required>
+              </div>
+              <div class="form-group">
+                <label>Category <span class="req">*</span></label>
+                <select id="f-category" required>
+                  <option value="">— Select Category —</option>
+                  <option value="Technical">Technical</option>
+                  <option value="Cultural">Cultural</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Social Service">Social Service</option>
+                  <option value="Literary">Literary</option>
+                  <option value="Arts & Media">Arts & Media</option>
+                  <option value="Academic">Academic</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
             </div>
 
