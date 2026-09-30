@@ -268,62 +268,150 @@ body {
 .stats-pill i { color: var(--gold); }
 
 /* =====================================================
-   CATEGORY FILTER TABS
+   CATEGORY CARDS (Design from screenshot)
    ===================================================== */
-.category-tabs {
+.category-cards-wrapper {
+  margin-bottom: 2.25rem;
+  width: 100%;
+}
+
+.category-cards-grid {
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  overflow-x: auto;
-  padding: 0.25rem 0.25rem 1.25rem;
-  margin-bottom: 1.5rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: stretch;
 }
 
-.category-tabs::-webkit-scrollbar {
-  height: 6px;
-}
-
-.category-tabs::-webkit-scrollbar-thumb {
-  background: var(--border-dk);
-  border-radius: 10px;
-}
-
-.cat-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 18px;
-  border-radius: 100px;
-  border: 1.5px solid var(--border);
+.category-card {
+  flex: 0 0 118px;
+  width: 118px;
+  min-height: 144px;
   background: var(--white);
-  color: var(--text-mid);
-  font-size: 0.88rem;
-  font-weight: 600;
-  font-family: 'Inter Tight', sans-serif;
+  border: 1.5px solid #ece4de;
+  border-radius: 18px;
+  padding: 16px 8px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   cursor: pointer;
-  white-space: nowrap;
-  transition: var(--trans);
-  box-shadow: var(--shadow-sm);
+  user-select: none;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  position: relative;
+  text-align: center;
 }
 
-.cat-tab:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-  background: rgba(139,26,26,0.03);
+.category-card:hover {
+  transform: translateY(-4px);
+  border-color: #d1c0b5;
+  box-shadow: 0 8px 24px rgba(139, 26, 26, 0.08);
+}
+
+.category-card.active {
+  background: #fcf6f2;
+  border: 1.5px solid var(--primary);
+  border-top: 3px solid var(--primary);
+  box-shadow: 0 6px 20px rgba(139, 26, 26, 0.12);
   transform: translateY(-2px);
 }
 
-.cat-tab.active {
-  background: var(--primary);
-  color: var(--white);
-  border-color: var(--primary);
-  box-shadow: 0 4px 14px rgba(139,26,26,0.25);
+.cat-card-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #f5ece5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.cat-tab.active i {
-  color: var(--gold-lt);
+.category-card:hover .cat-card-icon-wrap {
+  transform: scale(1.05);
+}
+
+.category-card.active .cat-card-icon-wrap {
+  background: #f2e4da;
+}
+
+.cat-card-icon-wrap i {
+  font-size: 1.25rem;
+  color: #1a1715;
+}
+
+.cat-card-name {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #231f1d;
+  line-height: 1.22;
+  text-align: center;
+  margin-bottom: 6px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2px;
+}
+
+.category-card.active .cat-card-name {
+  color: #15110f;
+  font-weight: 700;
+}
+
+.cat-card-count {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 50%;
+  background: #f4efe9;
+  color: #7d726b;
+  font-size: 0.74rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.cat-card-count.active,
+.category-card.active .cat-card-count {
+  background: #7a1515;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(122, 21, 21, 0.35);
+}
+
+@media (max-width: 900px) {
+  .category-cards-grid {
+    gap: 10px;
+    justify-content: center;
+  }
+  .category-card {
+    flex: 0 0 calc(25% - 10px);
+    width: auto;
+    min-width: 95px;
+  }
+}
+
+@media (max-width: 580px) {
+  .category-card {
+    flex: 0 0 calc(33.333% - 8px);
+    min-height: 135px;
+    padding: 12px 6px 10px;
+  }
+  .cat-card-icon-wrap {
+    width: 38px;
+    height: 38px;
+  }
+  .cat-card-icon-wrap i {
+    font-size: 1.1rem;
+  }
+  .cat-card-name {
+    font-size: 0.72rem;
+  }
 }
 
 /* =====================================================

@@ -73,11 +73,9 @@
       </div>
     </div>
 
-    <!-- Category Filter Tabs -->
-    <div id="category-tabs" class="category-tabs">
-      <button class="cat-tab active" data-cat="all" onclick="filterByCategory('all')">
-        <i class="fas fa-th"></i> All Clubs
-      </button>
+    <!-- Category Cards (Design from image) -->
+    <div class="category-cards-wrapper">
+      <div id="category-cards-grid" class="category-cards-grid"></div>
     </div>
 
     <div id="clubs-grid" class="clubs-grid">
@@ -180,13 +178,18 @@
                 <label>Category <span class="req">*</span></label>
                 <select id="f-category" required>
                   <option value="">— Select Category —</option>
-                  <option value="Technical">Technical</option>
+                  <option value="Tech & Innovation">Tech & Innovation</option>
+                  <option value="AI & Robotics">AI & Robotics</option>
+                  <option value="Coding & Dev">Coding & Dev</option>
+                  <option value="Science & Research">Science & Research</option>
+                  <option value="Arts & Design">Arts & Design</option>
+                  <option value="Music & Performance">Music & Performance</option>
                   <option value="Cultural">Cultural</option>
-                  <option value="Sports">Sports</option>
-                  <option value="Social Service">Social Service</option>
-                  <option value="Literary">Literary</option>
-                  <option value="Arts & Media">Arts & Media</option>
-                  <option value="Academic">Academic</option>
+                  <option value="Sports & Wellness">Sports & Wellness</option>
+                  <option value="Media & Publications">Media & Publications</option>
+                  <option value="Community Service">Community Service</option>
+                  <option value="Literary & Debate">Literary & Debate</option>
+                  <option value="Entrepreneurship">Entrepreneurship</option>
                   <option value="Other">Other</option>
                 </select>
               </div>

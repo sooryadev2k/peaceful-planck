@@ -55,44 +55,86 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // =====================================================
-//  Category Filter
+//  Category Filter (Cards layout from design)
 // =====================================================
+const CATEGORIES = [
+  { id: 'all',                  name: 'All Clubs',            icon: 'fas fa-globe' },
+  { id: 'tech-innovation',      name: 'Tech & Innovation',    icon: 'fas fa-microchip',     match: ['Tech & Innovation', 'Technical', 'Tech'] },
+  { id: 'ai-robotics',          name: 'AI & Robotics',        icon: 'fas fa-robot',         match: ['AI & Robotics', 'Robotics'] },
+  { id: 'coding-dev',           name: 'Coding & Dev',         icon: 'fas fa-code',          match: ['Coding & Dev', 'Coding', 'Development'] },
+  { id: 'science-research',     name: 'Science & Research',   icon: 'fas fa-flask',         match: ['Science & Research', 'Academic', 'Science'] },
+  { id: 'arts-design',          name: 'Arts & Design',        icon: 'fas fa-palette',       match: ['Arts & Design', 'Arts', 'Design'] },
+  { id: 'music-performance',    name: 'Music & Performance',  icon: 'fas fa-music',         match: ['Music & Performance', 'Music'] },
+  { id: 'cultural',             name: 'Cultural',             icon: 'fas fa-masks-theater', match: ['Cultural'] },
+  { id: 'sports-wellness',      name: 'Sports & Wellness',    icon: 'fas fa-futbol',        match: ['Sports & Wellness', 'Sports'] },
+  { id: 'media-publications',   name: 'Media & Publications', icon: 'fas fa-newspaper',     match: ['Media & Publications', 'Arts & Media', 'Media'] },
+  { id: 'community-service',    name: 'Community Service',    icon: 'fas fa-handshake',     match: ['Community Service', 'Social Service'] },
+  { id: 'literary-debate',      name: 'Literary & Debate',    icon: 'fas fa-book-open',     match: ['Literary & Debate', 'Literary'] },
+  { id: 'entrepreneurship',     name: 'Entrepreneurship',     icon: 'fas fa-lightbulb',     match: ['Entrepreneurship', 'E-Cell'] }
+];
+
 const CATEGORY_ICONS = {
-  'Technical':      'fas fa-microchip',
-  'Cultural':       'fas fa-music',
-  'Sports':         'fas fa-futbol',
-  'Social Service': 'fas fa-hands-helping',
-  'Literary':       'fas fa-book-open',
-  'Arts & Media':   'fas fa-palette',
-  'Academic':       'fas fa-graduation-cap',
-  'Other':          'fas fa-ellipsis-h'
+  'Tech & Innovation':    'fas fa-microchip',
+  'Technical':            'fas fa-microchip',
+  'AI & Robotics':        'fas fa-robot',
+  'Coding & Dev':         'fas fa-code',
+  'Science & Research':   'fas fa-flask',
+  'Academic':             'fas fa-flask',
+  'Arts & Design':        'fas fa-palette',
+  'Music & Performance':  'fas fa-music',
+  'Cultural':             'fas fa-masks-theater',
+  'Sports & Wellness':    'fas fa-futbol',
+  'Sports':               'fas fa-futbol',
+  'Media & Publications': 'fas fa-newspaper',
+  'Arts & Media':         'fas fa-newspaper',
+  'Community Service':    'fas fa-handshake',
+  'Social Service':       'fas fa-handshake',
+  'Literary & Debate':    'fas fa-book-open',
+  'Literary':             'fas fa-book-open',
+  'Entrepreneurship':     'fas fa-lightbulb',
+  'Other':                'fas fa-ellipsis-h'
 };
 
-function renderCategoryTabs() {
-  const tabsEl = document.getElementById('category-tabs');
-  if (!tabsEl) return;
-
-  // Collect unique categories from data
-  const cats = [...new Set(allClubs.map(c => c.category || 'Other').filter(Boolean))].sort();
-
-  let html = `<button class="cat-tab ${activeCategory === 'all' ? 'active' : ''}" data-cat="all" onclick="filterByCategory('all')">
-    <i class="fas fa-th"></i> All (${allClubs.length})
-  </button>`;
-
-  cats.forEach(cat => {
-    const count = allClubs.filter(c => (c.category || 'Other') === cat).length;
-    const icon  = CATEGORY_ICONS[cat] || 'fas fa-folder';
-    html += `<button class="cat-tab ${activeCategory === cat ? 'active' : ''}" data-cat="${esc(cat)}" onclick="filterByCategory('${esc(cat)}')">
-      <i class="${icon}"></i> ${esc(cat)} (${count})
-    </button>`;
-  });
-
-  tabsEl.innerHTML = html;
+function matchesCategory(clubCat, catDef) {
+  if (!clubCat) return false;
+  if (catDef.id === 'all') return true;
+  if (clubCat.toLowerCase() === catDef.name.toLowerCase()) return true;
+  if (catDef.match && catDef.match.some(m => m.toLowerCase() === clubCat.toLowerCase())) return true;
+  return false;
 }
 
-function filterByCategory(cat) {
-  activeCategory = cat;
-  renderCategoryTabs();
+function getCategoryCount(catDef) {
+  if (catDef.id === 'all') return allClubs.length;
+  return allClubs.filter(c => matchesCategory(c.category, catDef)).length;
+}
+
+function renderCategoryCards() {
+  const container = document.getElementById('category-cards-grid');
+  if (!container) return;
+
+  container.innerHTML = CATEGORIES.map(cat => {
+    const isActive = activeCategory === cat.id;
+    const count = getCategoryCount(cat);
+
+    return `
+      <div class="category-card ${isActive ? 'active' : ''}"
+           onclick="filterByCategory('${cat.id}')"
+           role="button"
+           tabindex="0"
+           title="${esc(cat.name)}">
+        <div class="cat-card-icon-wrap">
+          <i class="${cat.icon}"></i>
+        </div>
+        <div class="cat-card-name">${esc(cat.name)}</div>
+        <div class="cat-card-count ${isActive ? 'active' : ''}">${count}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterByCategory(catId) {
+  activeCategory = catId;
+  renderCategoryCards();
   renderGrid();
 }
 
@@ -109,16 +151,21 @@ function renderGrid() {
 
   // Apply category filter
   if (activeCategory !== 'all') {
-    filtered = filtered.filter(c => (c.category || 'Other') === activeCategory);
+    const activeCatDef = CATEGORIES.find(c => c.id === activeCategory);
+    if (activeCatDef) {
+      filtered = filtered.filter(c => matchesCategory(c.category, activeCatDef));
+    }
   }
 
-  // Update category tabs (always)
-  renderCategoryTabs();
+  // Update category cards
+  renderCategoryCards();
 
   if (filtered.length === 0) {
+    const activeCatDef = CATEGORIES.find(c => c.id === activeCategory);
+    const catLabel = (activeCatDef && activeCatDef.id !== 'all') ? ` in "${activeCatDef.name}"` : '';
     const msg = allClubs.length === 0
       ? 'No clubs yet. An admin can add clubs using the <strong>+ Add Club</strong> button.'
-      : 'No clubs match your search / filter.';
+      : `No clubs found${catLabel}.`;
     grid.innerHTML = `
       <div class="empty-state">
         <i class="fas fa-${allClubs.length === 0 ? 'users' : 'search'}"></i>
