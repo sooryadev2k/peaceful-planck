@@ -21,20 +21,49 @@
 
 <body>
 
-  <!-- ==================== NAVBAR ==================== -->
+  <!-- ==================== NAVBAR (Amrita Header) ==================== -->
   <nav class="navbar">
-    <div class="nav-brand">
-      <i class="fas fa-university nav-icon"></i>
-      <div class="nav-brand-text">
-        <span class="nav-title">Amrita Club Portal</span>
-        <span class="nav-sub">Discover · Connect · Grow</span>
+    <div class="nav-brand" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="cursor:pointer">
+      <div class="brand-badge">
+        <i class="fas fa-university"></i>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">AMRITA</span>
+        <span class="brand-sub">STUDENT CLUBS PORTAL</span>
       </div>
     </div>
+
+    <!-- Center Navigation Links -->
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="#" class="nav-link active" id="nav-home" onclick="navTo(event, 'home')">
+          <i class="fas fa-home"></i> Home
+          <span class="nav-link-indicator"></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#clubs-grid" class="nav-link" id="nav-clubs" onclick="navTo(event, 'clubs')">
+          <i class="fas fa-users"></i> All Clubs
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="javascript:void(0)" class="nav-link" id="nav-admin" onclick="openLoginModal()">
+          <i class="fas fa-shield-alt"></i> Admin
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#footer" class="nav-link" id="nav-contact" onclick="navTo(event, 'contact')">
+          <i class="fas fa-envelope"></i> Contact
+        </a>
+      </li>
+    </ul>
+
+    <!-- Right Actions / Login -->
     <div class="nav-actions">
       <div id="admin-status" class="admin-status hidden"></div>
-      <button id="admin-btn" class="btn btn-outline" onclick="openLoginModal()">
-        <i class="fas fa-lock"></i>
-        <span>Admin Login</span>
+      <button id="admin-btn" class="nav-login-btn" onclick="openLoginModal()">
+        <i class="fas fa-sign-in-alt"></i>
+        <span>Login</span>
       </button>
     </div>
   </nav>
@@ -87,7 +116,7 @@
   </main>
 
   <!-- ==================== FOOTER ==================== -->
-  <footer class="footer">
+  <footer class="footer" id="footer">
     <div class="footer-inner">
       <div class="footer-brand">
         <i class="fas fa-university"></i>

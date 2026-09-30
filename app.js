@@ -424,7 +424,7 @@ async function doLogin() {
   adminStatus.classList.remove('hidden');
 
   adminBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i><span>Logout</span>';
-  adminBtn.classList.replace('btn-outline', 'btn-secondary');
+  adminBtn.classList.add('logged-in');
   adminBtn.onclick = doLogout;
 
   fab.classList.remove('hidden');
@@ -451,11 +451,47 @@ function doLogout() {
   fab.classList.add('hidden');
   actionsEl.classList.add('hidden');
 
-  adminBtn.innerHTML = '<i class="fas fa-lock"></i><span>Admin Login</span>';
-  adminBtn.classList.replace('btn-secondary', 'btn-outline');
+  adminBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i><span>Login</span>';
+  adminBtn.classList.remove('logged-in');
   adminBtn.onclick = openLoginModal;
 
   showToast('Logged out successfully', 'info');
+}
+
+// Navigation Helper
+function navTo(e, target) {
+  if (e) e.preventDefault();
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.classList.remove('active');
+    const ind = l.querySelector('.nav-link-indicator');
+    if (ind) ind.remove();
+  });
+
+  if (target === 'home') {
+    const el = document.getElementById('nav-home');
+    if (el) {
+      el.classList.add('active');
+      el.innerHTML = `<i class="fas fa-home"></i> Home<span class="nav-link-indicator"></span>`;
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    filterByCategory('all');
+  } else if (target === 'clubs') {
+    const el = document.getElementById('nav-clubs');
+    if (el) {
+      el.classList.add('active');
+      el.innerHTML = `<i class="fas fa-users"></i> All Clubs<span class="nav-link-indicator"></span>`;
+    }
+    const gridEl = document.getElementById('clubs-grid');
+    if (gridEl) gridEl.scrollIntoView({ behavior: 'smooth' });
+  } else if (target === 'contact') {
+    const el = document.getElementById('nav-contact');
+    if (el) {
+      el.classList.add('active');
+      el.innerHTML = `<i class="fas fa-envelope"></i> Contact<span class="nav-link-indicator"></span>`;
+    }
+    const footerEl = document.getElementById('footer');
+    if (footerEl) footerEl.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
 // =====================================================

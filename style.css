@@ -42,69 +42,190 @@ body {
 }
 
 /* =====================================================
-   NAVBAR
+   NAVBAR (Amrita Header - screenshot design)
    ===================================================== */
 .navbar {
   position: sticky;
   top: 0;
   z-index: 500;
-  background: var(--white);
-  border-bottom: 3px solid var(--gold);
-  height: 70px;
-  padding: 0 2rem;
+  background: #6e001a;
+  background: linear-gradient(90deg, #620016 0%, #760420 50%, #620016 100%);
+  height: 68px;
+  padding: 0 2.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.28);
+  border-bottom: none;
 }
 
+/* Brand */
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  user-select: none;
 }
 
-.nav-icon {
-  font-size: 2rem;
-  color: var(--gold);
+.brand-badge {
+  width: 40px;
+  height: 40px;
+  background: #c8952c;
+  background: linear-gradient(135deg, #d8a436 0%, #ba831f 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   flex-shrink: 0;
 }
 
-.nav-brand-text {
+.brand-text {
   display: flex;
   flex-direction: column;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
-.nav-title {
-  font-family: 'Petrona', serif;
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: var(--primary);
-}
-
-.nav-sub {
-  font-size: 0.7rem;
-  color: var(--text-light);
-  letter-spacing: 1.5px;
+.brand-name {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.8px;
+  color: #dfa737;
   text-transform: uppercase;
 }
 
+.brand-sub {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 0.63rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+
+/* Center Menu */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px 9px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  font-family: 'Inter Tight', sans-serif;
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.nav-link i {
+  font-size: 0.9rem;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-link.active {
+  background: rgba(0, 0, 0, 0.24);
+  color: #dfa737;
+  font-weight: 600;
+}
+
+.nav-link.active i {
+  color: #dfa737;
+}
+
+.nav-link-indicator {
+  display: block;
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 3px;
+  background: #dfa737;
+  border-radius: 2px;
+}
+
+/* Right Action: Login Pill Button */
 .nav-actions {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-.admin-status {
-  font-size: 0.82rem;
+.nav-login-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid #dfa737;
+  border-radius: 100px;
+  background: transparent;
+  color: #dfa737;
+  padding: 7px 22px;
+  font-size: 0.88rem;
   font-weight: 600;
-  color: var(--primary);
-  background: rgba(139,26,26,0.08);
-  border: 1px solid rgba(139,26,26,0.2);
-  padding: 5px 14px;
+  font-family: 'Inter Tight', sans-serif;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.nav-login-btn i {
+  font-size: 0.85rem;
+}
+
+.nav-login-btn:hover {
+  background: #dfa737;
+  color: #620016;
+  box-shadow: 0 4px 14px rgba(224, 171, 59, 0.3);
+}
+
+.nav-login-btn.logged-in {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+
+.nav-login-btn.logged-in:hover {
+  background: #dc3545;
+  border-color: #dc3545;
+  color: #ffffff;
+}
+
+.admin-status {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #dfa737;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(223, 167, 55, 0.35);
+  padding: 4px 12px;
   border-radius: 100px;
   white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0 1.25rem;
+  }
+  .nav-menu {
+    display: none;
+  }
 }
 
 /* =====================================================
