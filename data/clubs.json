@@ -1,18 +1,5 @@
 [
   {
-    "id": "club-1791472257673",
-    "name": "bios",
-    "category": "Coding & Dev",
-    "clubHead": "Founder and cheif mentor: Vipin Pavithran",
-    "mission": "Learning & Researching on various Cyber Security fields\nParticipating & organizing CTFs across the world\nOrganizing workshops & training programmes\nContributing to open-source security tools\nDesigning and testing hardware security modules\nCollaborating in international cyber-security research projects\nPenetration testing, bug-bounty hunting & submitting CVEs\nProviding Cyber Security Consultancy Services",
-    "aboutClub": "India's No.1 Ranked CTF Team & Cyber Security Research Club\nWe are a team of college students from Amrita university, passionate about cyber security, and dedicated to protect tomorrow's cyberspace. At our student-run club, our mentors train freshers in cyber-security through CTFs. We organize infosec events, trainings, and work on a wide variety of cyber-security research projects.",
-    "joiningProcedure": "Register through  join.bi0s.in",
-    "contact": "bi0s.in , join.bi0s.in",
-    "logoUrl": "https://raw.githubusercontent.com/sooryadev2k/peaceful-planck/master/images/club-1791472257673-logo.jpeg",
-    "achievements": [],
-    "createdAt": "2026-10-08T15:11:00.230Z"
-  },
-  {
     "id": "club-1791471008844",
     "name": "Nitro nomads",
     "category": "Tech & Innovation",
@@ -23,7 +10,8 @@
     "contact": "Phone numbers:- 9961700642,8714562537\nInstagram page:- nitro_ _ nomads",
     "logoUrl": "https://raw.githubusercontent.com/sooryadev2k/peaceful-planck/master/images/club-1791471008844-logo.jpeg",
     "achievements": [],
-    "createdAt": "2026-10-08T14:50:32.450Z"
+    "createdAt": "2026-10-08T14:50:32.450Z",
+    "updatedAt": "2026-10-08T15:14:15.668Z"
   },
   {
     "id": "demo-1",
